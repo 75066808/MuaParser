@@ -1,29 +1,22 @@
 package SYMBOL;
+import UTILS.GeneralType;
+
 import java.util.HashMap;
 
 public class SymbolList {
 
-    private HashMap<String, Value> symMap;
+    private HashMap<String, GeneralType> symMap;
 
     public SymbolList() {
         symMap = new HashMap<>();
     }
 
-    public void setValue(String symbol, String value) {
-        Value currentVal;
-
-        if (symMap.containsKey(symbol))
-            currentVal = symMap.get(symbol);
-        else
-            currentVal = new Value();
-
-
-        currentVal.value = value;
-        symMap.put(symbol, currentVal);
+    public void setValue(String symbol, GeneralType value) {
+        symMap.put(symbol, value);
     }
 
-    public String getValue(String symbol) {
-        return symMap.get(symbol).value;
+    public GeneralType getValue(String symbol) {
+        return symMap.get(symbol);
     }
 
     public boolean containSymbol(String symbol) {

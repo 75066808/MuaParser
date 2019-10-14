@@ -33,29 +33,19 @@ public class Interpreter {
 
     private GeneralType parse(Scanner scan, LineReader lineReader) throws Exception {
 
-        try {
-            GeneralType token = lineReader.readToken();
+        GeneralType token = lineReader.readToken();
 
-            if (token.type == GeneralType.OPERATION)
+        switch (token.type) {
+            case GeneralType.OPERATION:
                 return operationParse(scan, lineReader, token);  // start calculate expression
-
-            switch (token.value) {
-                case "(":
+            case GeneralType.OPERATOR:
+                if (token.value.equals("("))
                     return expressionParse(scan, lineReader); // start calculate operation
-                case "+":
-                case "-":
-                case "*":
-                case "/":
-                case ")":
+                else
                     throw new Exception();
-                default: // word
-                    return token;
-            }
-
-        } catch (Exception e) {
-            throw e;
+            default: // word
+                return token;
         }
-
 
     }
 
@@ -94,10 +84,7 @@ public class Interpreter {
 
             case "print":
                 resultValue = parse(scan, lineReader);
-                if (resultValue.type == GeneralType.NUMBER)
-                    System.out.println(Double.parseDouble(resultValue.value));
-                else
-                    System.out.println(resultValue.value);
+                System.out.println(resultValue.value);
                 return new GeneralType(GeneralType.VOID, null);
 
 

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="MuaParser:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="8eb56d51-9faa-49ee-aa49-6a2b807cc6e4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/INTERPRETER/Calculator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/MuaParser_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/INTERPRETER/Calculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/INTERPRETER/Calculator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/INTERPRETER/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/INTERPRETER/Interpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SYMBOL/SymbolList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SYMBOL/SymbolList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SYMBOL/Value.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UTILS/GeneralType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UTILS/GeneralType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UTILS/LineReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/INTERPRETER/LineReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/INTERPRETER/LineReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/INTERPRETER/LineReader.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,7 +32,11 @@
   <component name="ProjectId" id="1S0wYWbPeUsWdQ7VGMEdaRZjqAS" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../test" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -84,16 +89,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/INTERPRETER/Interpreter.java</url>
-          <line>20</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

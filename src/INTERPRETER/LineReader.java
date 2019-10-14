@@ -2,6 +2,9 @@ package INTERPRETER;
 
 import UTILS.GeneralType;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LineReader {
 
     private int offset;
@@ -17,10 +20,25 @@ public class LineReader {
         int endIndex;
         String tokenValue;
 
+
+        while (offset < string.length() && string.charAt(offset) == ' ')  // skip blank
+            offset++;
+
         if (offset >= string.length()) // empty
             return new GeneralType(GeneralType.VOID, null);
 
+
         switch(string.charAt(offset)) {
+
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+            case '%':
+            case '(':
+            case ')':
+                offset++;
+                return new GeneralType(GeneralType.OPERATOR, string.substring(offset - 1, offset));
 
             case ':': // thing
                 StringBuilder stringBuilder = new StringBuilder(string);
@@ -29,11 +47,10 @@ public class LineReader {
                 return new GeneralType(GeneralType.OPERATION, ":");
 
             case '\"': // word
-                endIndex = string.indexOf(' ',offset);
-                if (endIndex == -1) // not found
-                    endIndex = string.length();
+                endIndex = splitUntil(string.substring(offset), " ") + offset;
                 tokenValue = string.substring(offset + 1, endIndex);
-                offset = endIndex + 1; // reset offset
+
+                offset = endIndex; // reset offset
 
                 if (tokenValue.matches("^[a-z A-Z][_\\w]*$"))
                     return new GeneralType(GeneralType.NAME_WORD, tokenValue);
@@ -41,18 +58,15 @@ public class LineReader {
                     return new GeneralType(GeneralType.NAME_NOT_WORD, tokenValue);
 
             default:
-                endIndex = string.indexOf(' ',offset);
-                if (endIndex == -1) // not found
-                    endIndex = string.length();
+                endIndex = splitUntil(string.substring(offset), "+-*/%() ") + offset;
                 tokenValue = string.substring(offset, endIndex);
-                offset = endIndex + 1; // reset offset
+
+                offset = endIndex; // reset offset
 
                 if (tokenValue.matches("^-?[1-9]\\d*(\\.\\d*\\d)?$"))
                     return new GeneralType(GeneralType.NUMBER, tokenValue);
                 else if (tokenValue.equals("true") || tokenValue.equals("false"))
                     return new GeneralType(GeneralType.BOOLEAN, tokenValue);
-                else if (tokenValue.matches("^[\\+\\-\\*/%()]$"))
-                    return new GeneralType(GeneralType.OPERATOR, tokenValue);
                 else
                     return new GeneralType(GeneralType.OPERATION, tokenValue);
         }
@@ -62,4 +76,16 @@ public class LineReader {
     public boolean hasRest() {
         return string.length() > offset;
     }
+
+
+    private int splitUntil(String string, CharSequence charSequence) {
+        for (int i = 0;i < string.length();i++) {
+            for (int j = 0;j < charSequence.length(); j++) {
+                if (string.charAt(i) == charSequence.charAt(j))
+                    return i;
+            }
+        }
+        return string.length();
+    }
+
 }

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="MuaParser:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MuaParser_jar</output-path>
+    <root id="archive" name="MuaParser.jar">
+      <element id="module-output" name="MuaParser" />
+    </root>
+  </artifact>
+</component>

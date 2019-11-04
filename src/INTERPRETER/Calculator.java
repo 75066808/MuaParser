@@ -1,34 +1,29 @@
 package INTERPRETER;
 
-import UTILS.GeneralType;
+import UTILS.Value;
 
 import java.util.Stack;
 
 public class Calculator {   // for caculate the expression
 
-    private boolean startCal;
-    private Stack<GeneralType> resStack;
-    private Stack<GeneralType> opStack;
+    private Stack<Value> resStack;
+    private Stack<Value> opStack;
 
     public Calculator() {
-        startCal = false;
         resStack = new Stack<>();
         opStack = new Stack<>();
     }
 
+    public void addValue(Value newValue) throws Exception {
 
-    public void addSymbol(GeneralType newSymbol) throws Exception {
+        Value operator;
+        int priority = getPriority(newValue);
 
-        GeneralType operator;
-
-        startCal = true;
-
-        switch (newSymbol.type) {
-            case GeneralType.OPERATOR:
-                switch (newSymbol.value) {
+        switch (newValue.type) {
+            case OPERATOR:
+                switch (newValue.value) {
                     case "(":
-                        resStack.push(newSymbol);
-                        opStack.push(newSymbol);
+                        opStack.push(newValue);
                         break;
                     case ")":
                         while (!opStack.empty() && !opStack.peek().value.equals("(")) { // pop until find '('
@@ -37,77 +32,50 @@ public class Calculator {   // for caculate the expression
                         }
                         if (opStack.empty()) // no '('
                             throw new Exception();
-
-                        operator = opStack.pop(); // pop '('
-                        updateResult(operator);
+                        opStack.pop(); // pop '('
                         break;
-
-
-                    case "+":
-                    case "-":
-                    case "*":
-                        if (resStack.peek().type == GeneralType.NUMBER)  // double operand
-                            newSymbol.value += "d";
-                        else  // signal operand
-                            newSymbol.value += "s";  //  postpone no break
-
                     default:
-                        int prior = getPriority(newSymbol); // pop the high priority operator
-
                         while (!opStack.empty()) {
-                            int curPiror = getPriority(opStack.peek());
-
-                            if (prior < curPiror || (prior == curPiror && prior == 2)) // high priority or right compose
+                            if (priority > getPriority(opStack.peek())) // if priority is high
                                 break;
-
                             operator = opStack.pop();
                             updateResult(operator);
                         }
-
-                        resStack.push(newSymbol);
-                        opStack.push(newSymbol); // push current operator
+                        opStack.push(newValue);
                         break;
                 }
                 break;
-
-            case GeneralType.NUMBER:
-                resStack.push(newSymbol);
+            case NUMBER:
+                resStack.push(newValue);
                 break;
-
             default:
-                startCal = false;
                 throw new Exception();
+
         }
     }
 
 
     public boolean resultFinish() { // it expression finish ?
-        return startCal && resStack.size() == 1 && opStack.empty();
+        return resStack.size() == 1 && opStack.empty();
     }
 
-    public GeneralType getResult() {  // get finial result
-
-        if (!startCal || !resultFinish()) {
-            return new GeneralType(GeneralType.ERROR, null);
-        } else {
-            startCal = false;
+    public Value getResult() {  // get finial result
+        if (!resultFinish())
+            return new Value(Value.Type.ERROR);
+        else
             return resStack.pop();
-        }
     }
 
-    private int getPriority(GeneralType operator) throws Exception {
+    private int getPriority(Value operator) throws Exception {
         switch (operator.value) {
             case ")":
                 return 1;
-            case "+s":
-            case "-s":
-                return 2;
-            case "*d":
+            case "*":
             case "/":
             case "%":
                 return 3;
-            case "+d":
-            case "-d":
+            case "+":
+            case "-":
                 return 4;
             case "(":
                 return Integer.MAX_VALUE;
@@ -117,78 +85,45 @@ public class Calculator {   // for caculate the expression
     }
 
 
-    private void updateResult(GeneralType operator) throws Exception {
+    private void updateResult(Value operator) throws Exception {
 
         double result;
-        GeneralType operand1, operand2, op;
-
+        Value operand1, operand2;
 
         switch (operator.value) {  // calculate
-            case "+s":
-                operand1 =  resStack.pop();
-                op = resStack.pop();
-
-                result = Double.parseDouble(operand1.value);
-                resStack.push(new GeneralType(GeneralType.NUMBER, String.valueOf(result)));
-                break;
-
-            case "-s":
-                operand1 =  resStack.pop();
-                op = resStack.pop();
-
-                result = - Double.parseDouble(operand1.value);
-                resStack.push(new GeneralType(GeneralType.NUMBER, String.valueOf(result)));
-                break;
-
-            case "+d":
+            case "+":
                 operand2 =  resStack.pop();
-                op = resStack.pop();
                 operand1 = resStack.pop();
-
                 result = Double.parseDouble(operand1.value) + Double.parseDouble(operand2.value);
-                resStack.push(new GeneralType(GeneralType.NUMBER, String.valueOf(result)));
+                resStack.push(new Value(Value.Type.NUMBER, String.valueOf(result)));
                 break;
 
-            case "-d":
+            case "-":
                 operand2 =  resStack.pop();
-                op = resStack.pop();
                 operand1 = resStack.pop();
-
                 result = Double.parseDouble(operand1.value) - Double.parseDouble(operand2.value);
-                resStack.push(new GeneralType(GeneralType.NUMBER, String.valueOf(result)));
+                resStack.push(new Value(Value.Type.NUMBER, String.valueOf(result)));
                 break;
 
-            case "*d":
+            case "*":
                 operand2 =  resStack.pop();
-                op = resStack.pop();
                 operand1 = resStack.pop();
-
                 result = Double.parseDouble(operand1.value) * Double.parseDouble(operand2.value);
-                resStack.push(new GeneralType(GeneralType.NUMBER, String.valueOf(result)));
+                resStack.push(new Value(Value.Type.NUMBER, String.valueOf(result)));
                 break;
 
             case "/":
                 operand2 =  resStack.pop();
-                op = resStack.pop();
                 operand1 = resStack.pop();
-
                 result = Double.parseDouble(operand1.value) / Double.parseDouble(operand2.value);
-                resStack.push(new GeneralType(GeneralType.NUMBER, String.valueOf(result)));
+                resStack.push(new Value(Value.Type.NUMBER, String.valueOf(result)));
                 break;
 
             case "%":
                 operand2 =  resStack.pop();
-                op = resStack.pop();
                 operand1 = resStack.pop();
-
                 result = Double.parseDouble(operand1.value) % Double.parseDouble(operand2.value);
-                resStack.push(new GeneralType(GeneralType.NUMBER, String.valueOf(result)));
-                break;
-
-            case "(":
-                operand1 = resStack.pop();
-                op = resStack.pop();
-                resStack.push(operand1);
+                resStack.push(new Value(Value.Type.NUMBER, String.valueOf(result)));
                 break;
 
             default:

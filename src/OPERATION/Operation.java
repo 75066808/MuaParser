@@ -1,7 +1,5 @@
 package OPERATION;
 
-import SYMBOL.SymbolList;
-
 public class Operation {
 
 

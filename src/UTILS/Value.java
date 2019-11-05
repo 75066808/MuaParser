@@ -23,6 +23,7 @@ public class Value {
 
     public Value(Type type) { // set type
         this.type = type;
+        this.value = null;
         this.list = new Vector<>();
     }
 
@@ -38,5 +39,39 @@ public class Value {
 
         for (int i = 0;i < value.list.size(); i++)
             this.list.add(new Value(value.list.get(i)));
+    }
+
+
+    public boolean isnumber() {
+        if (value == null || type == Type.LIST)
+            return false;
+        else if (type == Type.NUMBER)
+            return true;
+        else
+            return value.matches("-?[1-9]\\d*(.\\d+)?");
+    }
+
+    public boolean isword() {
+        return type == Type.WORD || type == Type.NUMBER || type == Type.BOOLEAN;
+    }
+
+    public boolean islist() {
+        return type == Type.LIST;
+    }
+
+    public boolean isbool() {
+        if (value == null || type == Type.LIST)
+            return false;
+        else if (type == Type.BOOLEAN)
+            return true;
+        else
+            return value.equals("true") || value.equals("false");
+    }
+
+    public boolean isempty() {
+        if (type == Type.LIST)
+            return list.size() == 0;
+        else
+            return value.length() == 0;
     }
 }

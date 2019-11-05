@@ -1,5 +1,7 @@
 package OPERATION;
 
+import UTILS.Value;
+
 public class Operation {
 
 
@@ -48,6 +50,31 @@ public class Operation {
     }
 
 
+    static public int random(int value) {
+        return (int)System.currentTimeMillis() % value;
+    }
+
+    static public double sqrt(double value) {
+        return Math.sqrt(value);
+    }
+
+    static public int floor(double value) {
+        return (int)value;
+    }
+
+    static public void print(Value value) {
+        if (value.type != Value.Type.LIST)
+            System.out.print(value.value);
+        else {
+            System.out.print("[ ");
+            for (int i = 0;i < value.list.size(); i++) {
+                print(value.list.get(i));
+                System.out.print(" ");
+            }
+            System.out.print("]");
+        }
+
+    }
 
 
 }

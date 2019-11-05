@@ -17,8 +17,6 @@ public class Calculator {   // for caculate the expression
     public void addValue(Value newValue) throws Exception {
 
         Value operator;
-        int priority = getPriority(newValue);
-
         switch (newValue.type) {
             case OPERATOR:
                 switch (newValue.value) {
@@ -35,8 +33,9 @@ public class Calculator {   // for caculate the expression
                         opStack.pop(); // pop '('
                         break;
                     default:
+                        int priority = getPriority(newValue);
                         while (!opStack.empty()) {
-                            if (priority > getPriority(opStack.peek())) // if priority is high
+                            if (priority < getPriority(opStack.peek())) // if priority is high
                                 break;
                             operator = opStack.pop();
                             updateResult(operator);
@@ -45,12 +44,9 @@ public class Calculator {   // for caculate the expression
                         break;
                 }
                 break;
-            case NUMBER:
+            default:
                 resStack.push(newValue);
                 break;
-            default:
-                throw new Exception();
-
         }
     }
 

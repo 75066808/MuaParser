@@ -7,15 +7,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8eb56d51-9faa-49ee-aa49-6a2b807cc6e4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/UTILS/Value.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MuaParser/META-INF/MANIFEST.MF" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/INTERPRETER/Calculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/INTERPRETER/Calculator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/INTERPRETER/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/INTERPRETER/Interpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/INTERPRETER/LineReader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/INTERPRETER/TokenReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/INTERPRETER/TokenReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/NAMESPACE/Namespace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NAMESPACE/Namespace.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/OPERATION/Operation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/OPERATION/Operation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SYMBOL/SymbolList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NAMESPACE/Namespace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UTILS/GeneralType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UTILS/Value.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UTILS/Value.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

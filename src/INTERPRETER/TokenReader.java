@@ -1,27 +1,25 @@
 package INTERPRETER;
-import UTILS.Value;
+import UTILS.*;
 
 import java.util.Scanner;
 
 public class TokenReader {
 
-    private Scanner scanner;
+    private boolean stop;
 
+    private Scanner scanner;
     private Value list;
     private int listOffset;
 
-    private String command;
-    private int commandOffset;
-
-    private String stream;
-    private int streamOffset;
+    private StringReader command;
     
 
     public TokenReader(Scanner scanner, Value list) {
+        this.stop = false;
         this.scanner = scanner;
         this.list = list;
         this.listOffset = -1;
-        this.command = null;
+        this.command = new StringReader();
     }
 
     public Value readNextToken() { // read next token
@@ -29,21 +27,17 @@ public class TokenReader {
         if (readEnd()) // reach end
             return new Value(Value.Type.ERROR);
 
-        if (command == null || commandOffset >= command.length()) {  // string empty
-            if (list == null) { // read from scanner
-                command = scanner.nextLine().trim().replaceAll("\\s+", " ");
-                commandOffset = 0; // reset next string
-            } else { // read from list
+        if (command.isEmpty()) {  // string empty
+            if (list == null)  // read from scanner
+                command.reset(scanner.nextLine()); // reset next string
+            else { // read from list
                 listOffset++;
                 if (list.list.get(listOffset).type == Value.Type.LIST)   // list type
                     return new Value(list.list.get(listOffset)); // directly return
-                else {
-                    command = list.list.get(listOffset).value;
-                    commandOffset = 0; // reset next command line
-                }
+                else 
+                    command.reset(list.list.get(listOffset).value); // reset next command line
             }
         }
-
         return readToken();
     }
 
@@ -56,54 +50,43 @@ public class TokenReader {
     }
 
     public Value readListFromInput() {
-
-        int endOffset;
         Value value = new Value(Value.Type.LIST);
-
-        stream = scanner.nextLine().trim().replaceAll("\\s+", "");
-        streamOffset = 0;
+        StringReader stream = new StringReader();
+        stream.reset(scanner.nextLine());
 
         while (true) {
-            while (streamOffset < stream.length() && stream.charAt(streamOffset) == ' ')
-                streamOffset++; // skip blank
-
-            if (streamOffset >= stream.length())
+            stream.skip(); // skip blank
+            if (stream.isEmpty())
                 return value; // read end
-
-            if (stream.charAt(streamOffset) == '[') {
-                streamOffset++;
-                value.list.add(readList(false)); // read list from stream
-            } else {
-                endOffset = readUntil(stream.substring(streamOffset), "[] ") + streamOffset; // read one word
-                value.list.add(new Value(Value.Type.WORD, stream.substring(streamOffset, endOffset))); // add to list
-                streamOffset = endOffset; // update offset
-            }
+            if (stream.getChar() == '[') {
+                stream.forward();
+                value.list.add(readList(stream, false)); // read list from stream
+            } else
+                value.list.add(new Value(Value.Type.WORD, stream.readUntil("[] "))); // add to list
         }
     }
 
     public boolean readEnd() {
-
-        if (command != null && commandOffset < command.length()) // current string has rest
+        if (stop)
+            return true;
+        else if (!command.isEmpty()) // current string has rest
             return false;
         else if (list == null)  // read from scanner
             return !scanner.hasNextLine();
         else // read list end
             return list.list.size() <= listOffset + 1;
+    }
 
+    public void readStop() {
+        stop = true;
     }
 
     private Value readToken() {
-
-        int endOffset;
-        String tokenValue;
-
-        while (commandOffset < command.length() && command.charAt(commandOffset) == ' ')  // skip blank
-            commandOffset++;
-
-        if (commandOffset >= command.length()) // empty
+        command.skip();  // skip blank
+        if (command.isEmpty()) // empty
             return new Value(Value.Type.VOID, null);
 
-        switch(command.charAt(commandOffset)) {
+        switch(command.getChar()) {
             case '/':
             case '+':
             case '-':
@@ -111,100 +94,58 @@ public class TokenReader {
             case '%':
             case '(':
             case ')': // operator
-                commandOffset++;
-                return new Value(Value.Type.OPERATOR, command.substring(commandOffset - 1, commandOffset));
+                return new Value(Value.Type.OPERATOR, String.valueOf(command.readChar()));
 
             case '[': // list
-                commandOffset++;
-                return readList(true);
+                command.forward();
+                return readList(command, true);
 
             case ':': // thing
-                StringBuilder stringBuilder = new StringBuilder(command);
-                stringBuilder.setCharAt(commandOffset, '\"');
-                command = stringBuilder.toString();
+                command.setChar('\"');
                 return new Value(Value.Type.OPERATION, ":");
 
             case '\"': // word literal
-                endOffset = readUntil(command.substring(commandOffset), " ") + commandOffset;
-                tokenValue = command.substring(commandOffset + 1, endOffset); // read until blank
-
-                commandOffset = endOffset; // reset offset
-                if (tokenValue.matches("^[a-z A-Z][_\\w]*$")) // can be the name
-                    return new Value(Value.Type.NAME_WORD, tokenValue);
-                else
-                    return new Value(Value.Type.NAME_NOT_WORD, tokenValue);
-
+                command.forward();
+                return new Value(Value.Type.WORD, command.readUntil(" "));
             default:
-                endOffset = readUntil(command.substring(commandOffset), "+-*/%() ") + commandOffset;
-                tokenValue = command.substring(commandOffset, endOffset); // read until operator
-                commandOffset = endOffset; // reset offset
-                return new Value(Value.Type.WORD, tokenValue);
+                String token = command.readUntil("+-*/%() ");
+                if (token.matches("-?[1-9]\\d*(.\\d+)?"))
+                    return new Value(Value.Type.NUMBER, token);
+                else if (token.equals("true") || token.equals("false"))
+                    return new Value(Value.Type.BOOLEAN, token);
+                return new Value(Value.Type.OPERATION, token);
         }
 
     }
 
-    private Value readList(boolean fromCommand) {
-
-        int endOffset;
+    private Value readList(StringReader stringReader, boolean fromCommand) {
         Value value = new Value(Value.Type.LIST);
 
-        String string = (fromCommand) ? command : stream;
-        int stringOffset = (fromCommand) ? commandOffset : streamOffset;
-
         while (true) {
-            while (stringOffset < string.length() && string.charAt(stringOffset) == ' ')
-                stringOffset++; // skip blank
-
-            if (stringOffset >= string.length()) { // need next line
+            stringReader.skip(); // skip blank
+            
+            if (stringReader.isEmpty()) { // need next line
                 if (fromCommand) { // read from command
-                    if (readEnd()) {
-                        command = string;
-                        commandOffset = stringOffset;
+                    if (readEnd()) 
                         return new Value(Value.Type.ERROR); // reach end
-                    }
-                    string = scanner.nextLine().trim().replaceAll("\\s+", " ");
-                    stringOffset = 0;
+                    stringReader.reset(scanner.nextLine());
                 }
-                else { // read from stream
-                    stream = string;
-                    streamOffset = stringOffset;
+                else  // read from stream
                     return new Value(Value.Type.ERROR); // reach end
-                }
-
             }
 
-            switch (string.charAt(stringOffset)) {
+            switch (stringReader.getChar()) {
                 case '[':
-                    stringOffset++;
-                    value.list.add(readList(fromCommand));
+                    stringReader.forward();
+                    value.list.add(readList(stringReader, fromCommand));
                     break;
-
                 case ']':
-                    stringOffset++;
-                    if (fromCommand) { // read from command
-                        command = string;
-                        commandOffset = stringOffset;
-                    } else { // read from stream
-                        stream = string;
-                        streamOffset = stringOffset;
-                    }
+                    stringReader.forward();
                     return value;
-
                 default:
-                    endOffset = readUntil(string.substring(stringOffset), "[] ") + stringOffset; // read one word
-                    value.list.add(new Value(Value.Type.WORD, string.substring(stringOffset, endOffset))); // add to list
-                    stringOffset = endOffset; // update offset
+                    value.list.add(new Value(Value.Type.WORD, stringReader.readUntil("[] "))); // add to list
                     break;
             }
         }
-    }
-
-    private int readUntil(String string, CharSequence charSequence) {
-        for (int i = 0;i < string.length();i++)
-            for (int j = 0;j < charSequence.length(); j++)
-                if (string.charAt(i) == charSequence.charAt(j))
-                    return i;
-
-        return string.length();
     }
 }

@@ -1,6 +1,5 @@
 package INTERPRETER;
 import UTILS.*;
-
 import java.util.Scanner;
 
 public class TokenReader {
@@ -77,8 +76,15 @@ public class TokenReader {
             return list.list.size() <= listOffset + 1;
     }
 
-    public void readStop() {
+    public void readStopAll() { // stop all read
         stop = true;
+    }
+
+    public void readStopLine() { // stop one line ( annotation )
+        if (list == null) // read from standard input
+            command.stop();
+        else // read from list
+            readStopAll();
     }
 
     private Value readToken() {
@@ -87,14 +93,41 @@ public class TokenReader {
             return new Value(Value.Type.VOID, null);
 
         switch(command.getChar()) {
-            case '/':
             case '+':
             case '-':
             case '*':
             case '%':
+            case '^':
             case '(':
-            case ')': // operator
+            case ')': // single operator
                 return new Value(Value.Type.OPERATOR, String.valueOf(command.readChar()));
+
+            case '/': // double operator
+                String result = command.readTry("//");
+                if (result.equals("//")) // annotation
+                    return new Value(Value.Type.OPERATION, "//");
+                else // divide
+                    return new Value(Value.Type.OPERATOR, "/");
+            case '&': // & or &&
+                return new Value(Value.Type.OPERATOR, command.readTry("&&"));
+            case '|': // | or ||
+                return new Value(Value.Type.OPERATOR, command.readTry("||"));
+            case '=': // = or ==
+                return new Value(Value.Type.OPERATOR, command.readTry("=="));
+            case '!': // ! or !=
+                return new Value(Value.Type.OPERATOR, command.readTry("!="));
+
+            case '>':
+                if (command.readOK(">>")) // >>
+                    return new Value(Value.Type.OPERATOR, command.readTry(">>"));
+                else // >= or >
+                    return new Value(Value.Type.OPERATOR, command.readTry(">="));
+
+            case '<':
+                if (command.readOK("<<")) // <<
+                    return new Value(Value.Type.OPERATOR, command.readTry("<<"));
+                else // <= or <
+                    return new Value(Value.Type.OPERATOR, command.readTry("<="));
 
             case '[': // list
                 command.forward();
@@ -108,11 +141,11 @@ public class TokenReader {
                 command.forward();
                 return new Value(Value.Type.WORD, command.readUntil(" "));
             default:
-                String token = command.readUntil("+-*/%() ");
+                String token = command.readUntil("+-*/%()&|^!=<> ");
                 if (token.matches("-?[1-9]\\d*(.\\d+)?"))
-                    return new Value(Value.Type.NUMBER, token);
+                    return new Value(Value.Type.WORD, token);
                 else if (token.equals("true") || token.equals("false"))
-                    return new Value(Value.Type.BOOLEAN, token);
+                    return new Value(Value.Type.WORD, token);
                 return new Value(Value.Type.OPERATION, token);
         }
 

@@ -49,7 +49,6 @@ public class Operation {
         return !value;
     }
 
-
     static public int random(int value) {
         return (int)System.currentTimeMillis() % value;
     }
@@ -67,8 +66,8 @@ public class Operation {
             System.out.print(value.value);
         else {
             System.out.print("[ ");
-            for (int i = 0;i < value.list.size(); i++) {
-                print(value.list.get(i));
+            for (Value val : value.list) {
+                print(val);
                 System.out.print(" ");
             }
             System.out.print("]");
@@ -76,5 +75,12 @@ public class Operation {
 
     }
 
+    static public void wait(int value) {
+        try {
+            Thread.sleep(value);
+        } catch (Exception e) {
 
+        }
+
+    }
 }

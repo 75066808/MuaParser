@@ -6,7 +6,7 @@ public class Main {
 
         Interpreter interpreter = new Interpreter();
 
-        interpreter.interprete(null, null);
+        interpreter.interpret(null, null);
     }
 
 }

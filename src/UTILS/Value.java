@@ -9,8 +9,6 @@ public class Value {
         VOID,
         WORD,
         LIST,
-        OPERATION,
-        OPERATOR,
     }
 
     public Type type;
@@ -72,6 +70,15 @@ public class Value {
         this.list = new Vector<>();
     }
 
+    public Value(String[] valueList) { // set list value
+        this.type = Value.Type.LIST;
+        this.value = null;
+        this.list = new Vector<>();
+        for (String value : valueList)
+            this.list.add(new Value(Value.Type.WORD, value));
+    }
+
+
     public Value(Value value) {  // deep copy other value
         this.type = value.type;
         this.value = value.value;
@@ -86,7 +93,7 @@ public class Value {
         if (value == null || type == Type.LIST)
             return false;
         else
-            return value.matches("-?[1-9]\\d*(.\\d+)?");
+            return value.matches("-?\\d+(.\\d+)?");
     }
 
     public boolean isword() {

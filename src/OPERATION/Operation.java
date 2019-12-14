@@ -26,15 +26,15 @@ public class Operation {
     }
 
     static public boolean eq(String value1, String value2) {
-        return value1.compareTo(value2) == 0;
+        return Double.parseDouble(value1) == Double.parseDouble(value2);
     }
 
     static public boolean gt(String value1, String value2) {
-        return value1.compareTo(value2) > 0;
+        return Double.parseDouble(value1) > Double.parseDouble(value2);
     }
 
     static public boolean lt(String value1, String value2) {
-        return value1.compareTo(value2) < 0;
+        return Double.parseDouble(value1) < Double.parseDouble(value2);
     }
 
     static public boolean and(boolean value1, boolean value2) {

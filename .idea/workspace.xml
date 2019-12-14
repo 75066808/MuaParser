@@ -8,14 +8,12 @@
   <component name="ChangeListManager">
     <list default="true" id="8eb56d51-9faa-49ee-aa49-6a2b807cc6e4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/INTERPRETER/Calculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/INTERPRETER/Calculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/INTERPRETER/Calculator.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/INTERPRETER/Interpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/INTERPRETER/Interpreter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/INTERPRETER/TokenReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/INTERPRETER/TokenReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/NAMESPACE/Namespace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/NAMESPACE/Namespace.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/INTERPRETER/TokenReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ENVIRONMENT/CodeSpace.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/NAMESPACE/Namespace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ENVIRONMENT/DataSpace.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/OPERATION/Operation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/OPERATION/Operation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UTILS/StringReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UTILS/StringReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UTILS/StringReader.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/UTILS/Value.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UTILS/Value.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -42,7 +40,7 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -95,16 +93,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/INTERPRETER/Interpreter.java</url>
-          <line>85</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

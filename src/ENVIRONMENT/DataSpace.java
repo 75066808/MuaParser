@@ -1,4 +1,4 @@
-package NAMESPACE;
+package ENVIRONMENT;
 import UTILS.Value;
 
 import java.io.*;
@@ -6,19 +6,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-
-public class Namespace {
+public class DataSpace {
 
     private HashMap<String, Value> symbolMap;
-    private Namespace parent;
+    private DataSpace parent;
     private Value returnValue;
+    private boolean stop;
 
-
-    public Namespace(Namespace parent) {
+    public DataSpace(DataSpace parent) {
         this.symbolMap = new HashMap<>(); // init an empty map
         this.parent = parent; // set parent
-        setValue("pi", new Value(Value.Type.WORD, "init")); // initial name
-        setValue("run", new Value(Value.Type.WORD, "init")); // initial name
+        this.stop = false;
+
+        Value valuePI = new Value(Value.Type.LIST);
+        valuePI.list.add(new Value(new String[]{}));
+        valuePI.list.add(new Value(new String[]{"output","3.14159"}));
+        setValue("pi", valuePI); // initial pi
+
+        Value valueRun = new Value(Value.Type.LIST);
+        valueRun.list.add(new Value(new String[]{"list"}));
+        valueRun.list.add(new Value(new String[]{"repeat","1",":list"}));
+        setValue("run", valueRun); // initial run
+    }
+
+    public void setStop() {
+        this.stop = true;
+    }
+
+    public boolean isStop() {
+        return stop;
     }
 
     public boolean containName(String name) {
@@ -50,11 +66,11 @@ public class Namespace {
         return returnValue;
     }
 
-    public Namespace getNamespace(String symbol) {
+    public DataSpace getSpace(String symbol) {
         if (containName(symbol))
             return this;   // first find local
         else if (parent != null)
-            return parent.getNamespace(symbol); // if not, find parent
+            return parent.getSpace(symbol); // if not, find parent
         else // not find
             return null;
     }
